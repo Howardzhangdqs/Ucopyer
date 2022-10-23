@@ -4,8 +4,9 @@ const path = require("path");
 const Tree = (dir) => {
     let dirdata = fs.readdirSync(dir);
     dirdata.forEach((file) => {
-        let fdata = fs.statSync(path.join(dir, file));
-        fdata
+        if (fs.statSync(path.join(dir, file)).isDirectory()) {
+            
+        }
     });
 };
 
