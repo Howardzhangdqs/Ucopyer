@@ -19,8 +19,8 @@ app.use('/dashboard', express.static('./dashboard'));
 app.use("/dev", require("./router/dev.js"));
 
 const FILES = {
-	filelib: path.resolve(__dirname, "./filelib"),
-	md5file: path.resolve(__dirname, "./filelib/.md5"),
+	filelib: "./filelib",//path.resolve(__dirname, "./filelib"),
+	md5file: "./filelib/.md5",//path.resolve(__dirname, "./filelib/.md5"),
 };
 
 const PORT = 65432;
