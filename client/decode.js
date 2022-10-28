@@ -39,7 +39,7 @@ var _flib = [];
 var cmds = {};
 
 cmds = {
-	"log": () => {
+	"ls": () => {
 		for (let i in _flib)
 			console.log(chalk.green(_flib[i].m),
 				format_date(new Date(_flib[i].t)),
@@ -61,7 +61,8 @@ cmds = {
 	},
 };
 
-cmds["ls"] = cmds["log"];
+cmds["list"] = cmds["ls"];
+cmds["rename"] = cmds["rn"];
 
 (async function () {
 	for (let i in data)
@@ -75,12 +76,20 @@ cmds["ls"] = cmds["log"];
 
 	_flib.sort((a, b) => (b.t - a.t));
 
-	cmds.log();
+	cmds.ls();
 
 	let req = await question("\n> ");
-	while (req != "") {
+	while (true) {
 
-		if (cmds[req]) cmds[req]();
+		if (req == "") {
+			console.log("< " + chalk.cyan([
+				"Please input a command",
+				"`ls` or `log` to show all the files",
+				"`rn` to rename all the files",
+				" or enter `Exit` to Exit",
+			].join("\n  ")));
+
+		} else if (cmds[req]) cmds[req]();
 		else console.log("< " + chalk.red(`Command \`${chalk.cyan(req)}\` not found`));
 
 		req = await question("> ");
@@ -90,3 +99,5 @@ cmds["ls"] = cmds["log"];
 
 	process.exit(0);
 })();
+
+//console.log(process.mainModule == module);
