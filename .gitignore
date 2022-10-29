@@ -1,6 +1,5 @@
-/hider-rust/target
+/SilentRunner/rust/target
 /client/node_modules
 /package
 /client/filelib
-client/decode.exe
 *.exe
