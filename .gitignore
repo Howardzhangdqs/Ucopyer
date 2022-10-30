@@ -2,4 +2,5 @@
 /client/node_modules
 /package
 /client/filelib
-*.exe
+/client/*.exe
+/SilentRunner/cpp/*.exe
