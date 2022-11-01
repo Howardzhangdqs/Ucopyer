@@ -17,8 +17,10 @@
     "body-parser": "^1.20.1",
     "chalk": "^4.1.2",
     "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "iconv-lite": "^0.6.3",
     "node-cmd": "^5.0.0",
+    "node-fetch": "^2.6.6",
     "pako": "^2.0.4",
     "ws": "^8.9.0"
   }

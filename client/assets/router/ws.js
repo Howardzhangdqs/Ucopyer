@@ -2,7 +2,7 @@ const Ws = require('ws').WebSocketServer;
 
 var wss;
 
-var init = (server) => {
+var init = (app) => {
 	wss = new Ws({ server });
 	wss.on('connection', (ws) => {
 		ws.on('message', (data) => {
