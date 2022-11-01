@@ -57,7 +57,6 @@ app.get("/", (req, res) => {
 
 // 需要复制的文件
 app.post("/Ucopyer/copy", (req, res) => {
-	console.log(req.body);
 	res.send(JSON.stringify({
 		status: 200
 	}));
@@ -85,16 +84,17 @@ app.post("/Ucopyer/copy", (req, res) => {
 			new_flag = true;
 			filecopy[i] = fileinfo[i];
 			filelib[i] = {
-				p: fileinfo[i],
-				t: + new Date()
+				p: fileinfo[i], t: + new Date()
 			};
 		}
 	}
 
-	console.log(filecopy);
+	// 优雅的输出
+	if (! new_flag) console.log(chalk.yellow("No files need to be copyed"));
 
 	// 文件信息写入
 	Gzip.encode.file(FILES.md5file, JSON.stringify(filelib));
+	
 	// 复制
 	for (let i in filecopy) {
 		fs.copyFileSync(filecopy[i], path.resolve(FILES.filelib, i));
