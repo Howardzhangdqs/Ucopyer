@@ -1,41 +1,27 @@
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const chalk = require('chalk');
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+const chalk = require("chalk");
+const cmd = require("child_process").execFile;
+const exec = require("child_process").exec;
 
-const Gzip = require("./assets/Gzip.js")
+const Gzip = require("./assets/Gzip.js");
 
-const express = require('express');
+const http = require("http");
+const express = require("express");
 var app = express();
-const wss = require('express-ws')(app);
+const wss = require("express-ws")(app);
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
-// 加载bodyParser参数解析
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json());
-
-// 静态dashboard控制面板
-app.use('/dashboard', express.static('./dashboard'));
-
-// dev窗口
-app.use("/dev", require("./assets/router/dev.js"));
-
-// 路径定义
-const FILES = {
-	filelib: "./filelib",//path.resolve(__dirname, "./filelib"),
-	md5file: "./filelib/.md5",//path.resolve(__dirname, "./filelib/.md5"),
-};
-
-// 端口
-const PORT = 65432;
+var process_end = false;
 
 /** format_date
  * 格式化时间戳
  * @param {Number} t 时间戳
  * @returns 一个格式化后的字符串
  */
-var format_date = (t) => {
+ var format_date = (t) => {
 	t = t || new Date();
 	return (t.getFullYear() + '-' +
 		('0' + (t.getMonth() + 1)).slice(-2) + '-' +
@@ -45,6 +31,45 @@ var format_date = (t) => {
 		('0' + t.getSeconds()).slice(-2) + '.' +
 		('000' + t.getMilliseconds()).slice(-4));
 };
+
+
+// 开启ttyd, "-b", "/cmd"
+cmd("ttyd.exe", ["-p", "7681", "cmd"], (err) => {
+    if (err) console.log(chalk.red(err));
+});
+
+
+// 开启nginx反向代理
+cmd("nginx.exe", ["-c", "nginx-conf/nginx.conf"], (err) => {
+    if (err && !process_end) console.log(chalk.red(err));
+});
+
+
+// 代理ttyd
+/*
+const eproxy = require('express-http-proxy');
+app.use('/cmd/', eproxy('localhost:7681'));
+*/
+
+// 加载bodyParser参数解析
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// 静态dashboard控制面板
+app.use("/dashboard", express.static("./dashboard"));
+
+// dev窗口
+app.use("/dev", require("./assets/router/dev.js"));
+
+// 路径定义
+const FILES = {
+    filelib: path.resolve("./filelib"),
+    md5file: path.resolve("./filelib/.md5"),
+};
+
+// 端口
+const PORT = 65432;
+
 
 // 跳转
 app.get("/", (req, res) => {
@@ -83,9 +108,7 @@ app.post("/Ucopyer/copy", (req, res) => {
 			// 计入复制
 			new_flag = true;
 			filecopy[i] = fileinfo[i];
-			filelib[i] = {
-				p: fileinfo[i], t: + new Date()
-			};
+			filelib[i] = { p: fileinfo[i], t: + new Date() };
 		}
 	}
 
@@ -103,16 +126,36 @@ app.post("/Ucopyer/copy", (req, res) => {
 
 });
 
+app.ws("/dashboard", (ws, res) => {
+	ws.send(JSON.stringify({ ws: "open" }));
+	//console.log(ws);
+	ws.on('message', (msg) => {
+		console.log(msg);
+	});
+});
+
+/*
+var httpProxy = require("http-proxy");
+var proxy = new httpProxy.createProxyServer({
+    target: { host: "localhost", port: 7681 },
+});
+
+app.use("/cmd/", function (req, res) {
+	proxy.web(req, res);
+});
+*/
+
 //const _ws = require("./assets/router/ws.js").init(http_server);
 
 // 开服务器板子
-app.listen(PORT, () => {
+
+const server = app.listen(PORT, () => {
 	console.log(chalk.yellow('Starting up server'));
 	console.log(chalk.yellow('正在开启服务器'));
 	console.log();
 	
 	var getIPAddress = () => {
-		let ipv4 = [], ifaces = os.networkInterfaces();
+		let ipv4 = ["localhost"], ifaces = os.networkInterfaces();
 		for (let dev in ifaces)
 			ifaces[dev].forEach((details, _alias) => {
 				if (details.family == 'IPv4') ipv4.push(details.address);
@@ -127,9 +170,19 @@ app.listen(PORT, () => {
 	console.log("\nHit Ctrl-C to stop the server  按下 Ctrl-C 关闭服务器\n");
 });
 
+/*
+server.on('upgrade', (req, socket, head) => {
+	proxy.ws(req, socket, head);
+});
+*/
+
 // 退出板子
 process.on('SIGINT', () => {
+	process_end = true;
+
     console.log(chalk.red("Server stopped, ALL child_process killed meanwhile"));
     console.log(chalk.red("服务器已关闭，同时关闭所有子进程"));
-	process.exit();
+	exec("taskkill /f /t /im nginx.exe", () => {
+		process.exit();
+	});
 });

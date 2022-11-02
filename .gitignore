@@ -4,4 +4,6 @@
 /client/filelib
 /client/*.exe
 /SilentRunner/cpp/*.exe
-client/package-lock.json
+/client/package-lock.json
+/test
+*.o

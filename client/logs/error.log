@@ -1,0 +1,14 @@
+2022/11/02 21:25:32 [notice] 11620#8200: signal process started
+2022/11/02 21:27:02 [notice] 14672#5000: signal process started
+2022/11/02 21:30:32 [emerg] 6024#2032: CreateDirectory() "D:\DEV\Ucopyer\client/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2022/11/02 21:33:54 [emerg] 11072#13988: CreateFile() "D:\DEV\Ucopyer\client/logs/access.log" failed (3: The system cannot find the path specified)
+2022/11/02 21:43:10 [crit] 12880#13468: CreateProcess("nginx.exe") failed (2: The system cannot find the file specified)
+2022/11/02 21:43:10 [alert] 12880#13468: could not respawn worker
+2022/11/02 21:43:10 [crit] 12880#13468: CreateProcess("nginx.exe") failed (2: The system cannot find the file specified)
+2022/11/02 21:43:10 [alert] 12880#13468: could not respawn worker
+2022/11/02 21:48:25 [emerg] 9676#7520: CreateFile() "D:\DEV\Ucopyer\client/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2022/11/02 21:48:42 [emerg] 14984#12516: CreateFile() "D:\DEV\Ucopyer\client/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2022/11/02 21:49:48 [emerg] 9628#3572: CreateFile() "D:\DEV\Ucopyer\client/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2022/11/02 21:51:17 [emerg] 15960#16204: CreateFile() "D:\DEV\Ucopyer\client/conf/nginx.conf" failed (3: The system cannot find the path specified)
+2022/11/02 22:02:47 [error] 15888#12608: *213 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host) while proxying upgraded connection, client: 127.0.0.1, server: localhost, request: "GET /cmd/ws HTTP/1.1", upstream: "http://127.0.0.1:7681/ws", host: "localhost"
+2022/11/02 22:03:16 [error] 7288#9540: *4 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host) while proxying upgraded connection, client: 127.0.0.1, server: localhost, request: "GET /cmd/ws HTTP/1.1", upstream: "http://127.0.0.1:7681/ws", host: "localhost"
