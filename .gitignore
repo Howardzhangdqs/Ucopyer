@@ -5,6 +5,6 @@
 /SilentRunner/cpp/*.exe
 /client/package-lock.json
 /test
+/client/logs/*
 *.o
 *.log
-client/logs/*

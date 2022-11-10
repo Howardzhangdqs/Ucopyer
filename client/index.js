@@ -128,6 +128,7 @@ app.post("/Ucopyer/copy", (req, res) => {
 
 app.ws("/dashboard", (ws, res) => {
 	ws.send(JSON.stringify({ server: "ok" }));
+	ws.send(JSON.stringify({ server: "ok" }));
 	//console.log(ws);
 	ws.on('message', (msg) => {
 		console.log(msg);

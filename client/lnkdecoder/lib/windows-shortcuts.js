@@ -1,4 +1,5 @@
 var execFile = require('child_process').execFile;
+var exec = require('child_process').exec;
 var pathUtils = require('path');
 
 var iconv = require('iconv-lite');
@@ -96,11 +97,12 @@ function isString(x) {
 }
 
 exports.query = function(path, callback) {
-	execFile(__dirname + '/shortcut/Shortcut.exe',
-		['/A:Q', '/F:' + expandEnv(path)],
+	//console.log(pathUtils.resolve("lnkdecoder/lib/shortcut/Shortcut.exe"));
+	exec(`"${pathUtils.resolve("lnkdecoder/lib/shortcut/Shortcut.exe")}" /A:Q "/F:${expandEnv(path)}"`,
 		{ encoding: binaryEncoding },
 		function(error, stdout, stderr) {
 			stdout = iconv.decode(Buffer.from(stdout, binaryEncoding), encoding);
+			//console.log(error, stdout);
 			var result = parseQuery(stdout);
 			callback(error ? stderr || stdout : null, result);
 		});
@@ -122,7 +124,7 @@ exports.create = function(path, optionsOrCallbackOrTarget, callback) {
 		}
 	}
 
-	execFile(__dirname + '\\shortcut\\Shortcut.exe',
+	execFile('./shortcut/Shortcut.exe',
 		 commandArgs('C', path, options),
 		 { encoding: binaryEncoding },
 	     function(error, stdout, stderr) {
@@ -132,7 +134,7 @@ exports.create = function(path, optionsOrCallbackOrTarget, callback) {
 };
 
 exports.edit = function(path, options, callback) {
-	execFile(__dirname + '/shortcut/Shortcut.exe',
+	execFile('./shortcut/Shortcut.exe',
 		commandArgs('E', path, options),
 		{ encoding: binaryEncoding },
 		function(error, stdout, stderr) {

