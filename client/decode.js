@@ -38,6 +38,8 @@ var filelib = fs.readdirSync("./filelib/");
 var _flib = [];
 var cmds = {};
 
+/** 定义命令
+ */
 cmds = {
 	"ls": () => {
 		for (let i in _flib)
